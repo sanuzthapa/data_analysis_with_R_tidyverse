@@ -1,87 +1,106 @@
-<h1 align="center">Hi 👋, I'm THAPA Sanuz</h1>
-<h3 align="center">Student of Behavioral Economics at UFC, Besançon</h3>
+# Hi 👋, I'm THAPA Sanuz  
+### Student of Behavioral Economics at UFC, Besançon  
 
 ---
 
-### 🔭 About the Project
+## 🔭 About the Project  
 
-This project is designed for the analysis of **Costumer and Review** using ** Tidyvese in R [Experiemntal Project].
+This project is designed for the analysis of **Customer and Review Data** using **Tidyverse in R**.  
 
-#### Methodology used in this project:
+### Methodology:
 - Filtering and validating data  
 - Cleaning data  
-- Combining and creating relationships between two different datasets  
+- Combining and creating relationships between datasets  
 - Data visualization and manipulation  
 - Interactive dashboard design  
-- Data maipulation
-
----
-### Easy Navigation :
-
-# Analysis of Age Groups and Review Scores
-
-## Table of Contents
-- [Introduction](#introduction)
-- [Data Preparation](#data-preparation)
-- [Grouping by Age](#grouping-by-age)
-- [Calculating Average Review Scores](#calculating-average-review-scores)
-- [Visualization](#visualization)
-- [Conclusion](#conclusion)
-
-## Introduction
-This exercise focuses on analyzing customer reviews using graphical representations to extract meaningful insights. Two datasets are provided on Moodle for this purpose:
-
-#### 1. **`customers.csv`** (Customer Information):
-- Contains details about all potential reviewers of the app.
-- Variables:
-  - **`CustomerID`**: Unique identifier for customers across datasets.
-  - **`Gender`**: Declared gender of customers ("male", "female", or "other").
-  - **`Age`**: Age of customers in years.
-  - **`ResCountry`**: Country of residence of customers.
-
-#### 2. **`reviews.csv`** (Review Information):
-- Contains all app reviews posted between **January 1st, 2023, and June 30th, 2023**.
-- Key Points:
-  - Customers can only post **one review**.
-  - Not all customers have posted reviews.
-- Variables:
-  - **`CustomerID`**: Unique identifier for matching with `customers.csv`.
-  - **`Reviewdate`**: Date when the review was posted.
-  - **`Review`**: Score (0-100) indicating how much the user recommends the app.
-  - **`Favorite`**: Customer's favorite feature of the app (from preselected options).
-  - **`Comment`**: General comments left by the customer.
+- Advanced data manipulation techniques  
 
 ---
 
-## Data Preparation
-![Dashboard Overview](https://github.com/sanuzthapa/PowerBi-Dahsboard/blob/main/img/1intro.png)
+## Easy Navigation  
 
-## Count vs Country
+### Analysis of Age Groups and Review Scores  
 
+### Table of Contents  
+- [Introduction](#introduction)  
+- [Data Preparation](#data-preparation)  
+- [Count vs Country](#count-vs-country)  
+- [Histogram of Review Scores](#histogram-of-review-scores)  
+- [Keyword Filtering: "Interface"](#keyword-filtering-interface)  
+- [Distribution of Reviews](#distribution-of-reviews)  
+- [Relationship Between Age and Reviews](#relationship-between-age-and-reviews)  
+- [Mean Review vs Age Group](#mean-review-vs-age-group)  
+- [Conclusion](#conclusion)  
+
+---
+
+## Introduction  
+
+This exercise focuses on analyzing customer reviews using graphical representations to extract meaningful insights. Two datasets are provided:  
+
+### 1. `customers.csv`  
+Contains details about all potential reviewers of the app:  
+- **CustomerID**: Unique identifier for customers  
+- **Gender**: Declared gender ("male", "female", or "other")  
+- **Age**: Age in years  
+- **ResCountry**: Country of residence  
+
+### 2. `reviews.csv`  
+Contains app reviews posted between January 1 and June 30, 2023:  
+- **CustomerID**: Matches with `customers.csv`  
+- **ReviewDate**: Date of the review  
+- **Review**: Score (0–100) indicating recommendation level  
+- **Favorite**: Favorite feature (from preselected options)  
+- **Comment**: General comment left by the customer  
+
+---
+
+## Data Preparation  
+
+![Dashboard Overview](https://github.com/sanuzthapa/data_analysis_with_R_tidyverse/blob/main/img/1intro.png)  
+
+---
+
+## Count vs Country  
+
+```r
 ggplot(data = country_counts, aes(x = ResCountry, y = count)) +
   geom_bar(stat = "identity", fill = "skyblue") +
   labs(x = "Country", y = "Count", title = "Number of Reviews by Country") +
   theme_minimal()
-  
-![Count Vs Country](https://github.com/sanuzthapa/PowerBi-Dahsboard/blob/main/img/bycountry.png)
+```  
 
-## Using a histogram, display the distribution of the review score among all respondents
+![Count vs Country](https://github.com/sanuzthapa/data_analysis_with_R_tidyverse/blob/main/img/bycountry.png)  
 
+---
+
+## Histogram of Review Scores  
+
+```r
 plot = ggplot(data = data, aes(x = Review))
-
 plot + geom_histogram(fill="#C0C0C0", color="black")
-![histogram](https://github.com/sanuzthapa/PowerBi-Dahsboard/blob/main/img/img3.png)
+```  
 
-##  Scanning users who wrote the word “interface” in their comment.
+![Histogram](https://github.com/sanuzthapa/data_analysis_with_R_tidyverse/blob/main/img/img3.png)  
 
+---
+
+## Keyword Filtering: "Interface"  
+
+```r
 filteringInterface = data %>%
   filter(str_detect(Comment,"interface"))
 
 print(filteringInterface)
-![Costumer vs Word Count "interface"](https://github.com/sanuzthapa/PowerBi-Dahsboard/blob/main/img/img4.png)
+```  
 
-## Distribitutuion of reviews
+![Keyword Filtering](https://github.com/sanuzthapa/data_analysis_with_R_tidyverse/blob/main/img/img4.png)  
 
+---
+
+## Distribution of Reviews  
+
+```r
 data %>%
   filter(str_detect(Comment, "interface")) %>%
   ggplot(aes(x = Review)) +
@@ -90,19 +109,28 @@ data %>%
        x = "Review Score",
        y = "Frequency") +
   theme_minimal()
-  ![Frequency of keyword vs Score](https://github.com/sanuzthapa/PowerBi-Dahsboard/blob/main/img/img5.png)
-  
-## Relationshiup Between Age and Reviews
+```  
 
+![Distribution of Reviews](https://github.com/sanuzthapa/data_analysis_with_R_tidyverse/blob/main/img/img5.png)  
+
+---
+
+## Relationship Between Age and Reviews  
+
+```r
 ggplot(data = data, aes(x = Age, y = Review)) +
   geom_point(color = "blue", alpha = 0.6) +
   labs(x = "Age", y = "Review Score", title = "Relationship between Age and Review Score") +
   theme_minimal()
-  ![Age Group vs Score ](https://github.com/sanuzthapa/PowerBi-Dahsboard/blob/main/img/img6.png)
+```  
 
-## Mean review vs Age Group
+![Age vs Review](https://github.com/sanuzthapa/data_analysis_with_R_tidyverse/blob/main/img/img6.png)  
 
-# Group by age group and calculate the mean review score
+---
+
+## Mean Review vs Age Group  
+
+```r
 data %>%
   mutate(AgeGroup = case_when(
     Age >= 18 & Age <= 24 ~ "18-24",
@@ -116,24 +144,29 @@ data %>%
   summarise(mean_review = mean(Review)) %>%
   ggplot(aes(x = AgeGroup, y = mean_review)) +
   geom_point(color = "blue") +
-  geom_line(group = 1, color = "red") +  # Optional: add a line connecting the points
+  geom_line(group = 1, color = "red") +
   labs(title = "Mean Review Score by Age Group",
        x = "Age Group",
        y = "Mean Review Score") +
   theme_minimal()
-  
-  ![Age Group vs Mean Review](https://github.com/sanuzthapa/PowerBi-Dahsboard/blob/main/img/img7.png)
+```  
 
-## Conclusion
-Summary of findings and insights from the analysis.
+![Mean Review vs Age Group](https://github.com/sanuzthapa/data_analysis_with_R_tidyverse/blob/main/img/img7.png)  
 
+---
 
-### 💬 Connect with Me:
+## Conclusion  
+
+Summarizes findings and insights from the analysis.  
+
+---
+
+### 💬 Connect with Me  
 - 📫 **Email**: [sanuzh.thapa@gmail.com](mailto:sanus.thapa@gmail.com)  
-- 🌐 **LinkedIn**: [www.linkedin.com/in/sanuz-thapa](https://linkedin.com/in/sanuz-thapa)  
+- 🌐 **LinkedIn**: [Sanuz Thapa](https://linkedin.com/in/sanuz-thapa)  
 
 ---
 
-### 🛠️ Languages and Tools:
-
----
+### 🛠️ Languages and Tools  
+- **R** (Tidyverse, ggplot2)  
+- **Markdown** for reporting  
