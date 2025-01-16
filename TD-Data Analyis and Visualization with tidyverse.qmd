@@ -1,0 +1,172 @@
+---
+title: "U3-TD"
+format: revealjs
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+
+## Bullets
+
+When you click the **Render** button a document will be generated that includes:
+
+-   Content authored with markdown
+-   Output from executable code
+
+## Code
+
+When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+
+library(tidyverse)
+
+```
+
+```{r}
+setwd("C:/Users/sanuz/Desktop/RM1BDEEM/U3/")
+
+# Import CSV files into tibbles
+
+customers=read_csv("customers.csv", show_col_types = FALSE)
+reviews=read_csv("reviews.csv", show_col_types = FALSE)
+print(customers)
+print(reviews)
+
+```
+
+2\. Merge the two datasets together, so that each review is associated to the personal information of the reviewer.
+
+```{r}
+
+data = left_join(reviews, customers,by=join_by(CustomerID==CustomerID))
+print(data)
+```
+
+```{r}
+plot <- ggplot(data = data, aes(x = ResCountry, fill = ResCountry))
+
+plot + geom_bar()
+```
+
+```{r}
+country_counts <- data %>%
+  group_by(ResCountry) %>%
+  summarise(count = n())
+
+# Print the results
+print(country_counts)
+ggplot(data = country_counts, aes(x = ResCountry, y = count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Country", y = "Count", title = "Number of Reviews by Country") +
+  theme_minimal()
+```
+
+4.  Using a histogram, display the distribution of the review score among all respondents
+
+    ```{r}
+    plot = ggplot(data = data, aes(x = Review))
+
+    plot + geom_histogram(fill="#C0C0C0", color="black")
+
+    ```
+
+5\. Do this histogram again, but focus this time on users who wrote the word “interface” in their comment.
+
+```{r}
+filteringInterface = data %>%
+  filter(str_detect(Comment,"interface"))
+
+print(filteringInterface)
+
+countForInterface = nrow(filteringInterface)
+print(count)
+
+plot = ggplot(data = filteringInterface , aes(x = CustomerID))
+plot + geom_histogram(fill="#C0C0C0", color="black")
+
+
+
+```
+
+```{r}
+data %>%
+  filter(str_detect(Comment, "interface")) %>%
+  ggplot(aes(x = Review)) +
+  geom_histogram(binwidth = 5, fill = "lightblue", color = "black") +
+  labs(title = "Distribution of Reviews",
+       x = "Review Score",
+       y = "Frequency") +
+  theme_minimal()
+
+```
+
+Is there a relationship between age and review score? Draw a scatterplot using all
+data points to investigate this relationship.
+
+```{r}
+# Scatter plot of age vs. review score
+
+ggplot(data = data, aes(x = Age, y = Review)) +
+  geom_point(color = "blue", alpha = 0.6) +
+  labs(x = "Age", y = "Review Score", title = "Relationship between Age and Review Score") +
+  theme_minimal()
+
+```
+
+```{r}
+
+
+# Group by age group and calculate the mean review score
+data %>%
+  mutate(AgeGroup = case_when(
+    Age >= 18 & Age <= 24 ~ "18-24",
+    Age >= 25 & Age <= 34 ~ "25-34",
+    Age >= 35 & Age <= 44 ~ "35-44",
+    Age >= 45 & Age <= 54 ~ "45-54",
+    Age >= 55 & Age <= 64 ~ "55-64",
+    Age >= 65 ~ "65+"
+  )) %>%
+  group_by(AgeGroup) %>%
+  summarise(mean_review = mean(Review)) %>%
+  ggplot(aes(x = AgeGroup, y = mean_review)) +
+  geom_point(color = "blue") +
+  geom_line(group = 1, color = "red") +  # Optional: add a line connecting the points
+  labs(title = "Mean Review Score by Age Group",
+       x = "Age Group",
+       y = "Mean Review Score") +
+  theme_minimal()
+
+
+
+```
+
+```{r}
+
+# Define age groups and create a new dataset with the 'AgeGroup' column
+groupByAge <- data %>%
+  mutate(AgeGroup = case_when(
+    Age >= 18 & Age <= 24 ~ "18-24",
+    Age >= 25 & Age <= 34 ~ "25-34",
+    Age >= 35 & Age <= 44 ~ "35-44",
+    Age >= 45 & Age <= 54 ~ "45-54",
+    Age >= 55 & Age <= 64 ~ "55-64",
+    Age >= 65 ~ "65+",
+    TRUE ~ "Unknown"
+  ))
+
+# Group by age group and calculate the average review score
+averageReviewByAgegroup <- groupByAge %>%
+  group_by(AgeGroup) %>%
+  summarise(AverageReviewScore = mean(Review, na.rm = TRUE))
+
+
+ggplot(aes(x = groupByAge, y = averageReviewByAgegroup)) +
+  geom_point() +
+  labs(title = "Scatterplot of Age vs. Review",
+       x = "Age",
+       y = "Review Score") +
+  theme_minimal()
+```
