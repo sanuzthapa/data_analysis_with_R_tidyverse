@@ -1,5 +1,5 @@
 # Hi 👋, I'm THAPA Sanuz  
-### Student of Behavioral Economics at UFC, Besançon  
+### Student of Behavioral Economics and Data Science at UFC, Besançon  
 
 ---
 
